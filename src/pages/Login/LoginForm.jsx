@@ -1,7 +1,28 @@
-export default function LoginForm() {
+import { useState } from "react";
+import Button from "../../components/Button";
+
+export default function LoginForm({ onSubmit }) {
+    const [formValue, setFormValue] = useState({
+        email: "",
+        password: ""
+    });
+    const onFormSubmit = (event) => {
+        event.preventDefault();
+        if (formValue.email && formValue.password) {
+            onSubmit(formValue);
+        } else {
+            alert("Please enter all the required field(s)");
+        }
+    };
+    const handleFormValueChange = (event) => {
+        setFormValue({
+            ...formValue,
+            [event.target.name]: event.target.value
+        });
+    };
     return (
-        <div className="rounded p-3 bg-white text-center text-gray-700 font-light">
-            <form>
+        <div className="rounded p-3 bg-white text-center text-gray-700 font-light ">
+            <form onSubmit={onFormSubmit}>
                 <h1 className="text-4xl line-height-2 mb-8">Login</h1>
                 <div className="relative flex w-full flex-wrap items-stretch mb-2">
                     <span className="z-10 h-full leading-snug font-normal absolute text-center text-gray-800  bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
@@ -10,7 +31,15 @@ export default function LoginForm() {
                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                         </svg>
                     </span>
-                    <input type="email" placeholder="Email Address" required className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-gray-100  rounded text-sm border-0 outline-none focus:outline-none focus:ring w-full pl-10" />
+                    <input
+                        type="email"
+                        placeholder="Email Address"
+                        required
+                        name="email"
+                        value={formValue.email}
+                        onChange={handleFormValueChange}
+                        className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-gray-100  rounded text-sm border-0 outline-none focus:outline-none focus:ring w-full pl-10"
+                    />
                 </div>
                 <div className="relative flex w-full flex-wrap items-stretch mb-2">
                     <span className="z-10 h-full leading-snug font-normal absolute text-center text-gray-800  bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
@@ -22,15 +51,20 @@ export default function LoginForm() {
                             />
                         </svg>
                     </span>
-                    <input type="email" placeholder="Password" required className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-gray-100  rounded text-sm border-0 outline-none focus:outline-none focus:ring w-full pl-10" />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        required
+                        name="password"
+                        value={formValue.password}
+                        onChange={handleFormValueChange}
+                        className="px-3 py-3 placeholder-gray-400 text-gray-700 relative bg-gray-100  rounded text-sm border-0 outline-none focus:outline-none focus:ring w-full pl-10"
+                    />
                 </div>
-                <div class="flex space-x-2 justify-center mt-5">
-                    <button
-                        type="submit"
-                        class="inline-block px-6 py-2.5 bg-blue-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                    >
+                <div className="mt-5">
+                    <Button type="submit" className="bg-blue-500 px-6 py-2.5 text-white m-1 w-[110px] rounded-md uppercase">
                         Log In
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>

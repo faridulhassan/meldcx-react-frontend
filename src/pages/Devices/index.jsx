@@ -27,7 +27,7 @@ export default function Devices() {
         };
     }, []);
     return (
-        <div>
+        <div className="pt-40">
             <ActiveDevices activeDevices={activeDevices} />
             <div className="fixed bottom-0 w-full bg-opacity-20 bg-gray-900 py-2">
                 <div className="container text-center">

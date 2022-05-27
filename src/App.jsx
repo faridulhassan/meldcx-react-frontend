@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Devices from "./pages/Devices";
 import Login from "./pages/Login";
@@ -7,18 +7,6 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter>
-                <nav>
-                    <div className="container">
-                        <ul>
-                            <li>
-                                <Link to="/">Login</Link>
-                            </li>
-                            <li>
-                                <Link to="/devices">Devices</Link>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
                 <Routes>
                     <Route index element={<Login />} />
                     <Route path="login" element={<Login />} />
