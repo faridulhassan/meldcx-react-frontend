@@ -10,10 +10,10 @@ export default function Devices() {
         };
     }, []);
     return (
-        <div sx={{ pt: 12 }}>
+        <div>
             <h1>Devices</h1>
-            <button size="sm">Notify</button>
-            <button size="sm">Log Out</button>
+            <button>Notify</button>
+            <button>Log Out</button>
         </div>
     );
 }

@@ -8,17 +8,20 @@ function App() {
         <div className="App">
             <BrowserRouter>
                 <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Login</Link>
-                        </li>
-                        <li>
-                            <Link to="/devices">Devices</Link>
-                        </li>
-                    </ul>
+                    <div className="container">
+                        <ul>
+                            <li>
+                                <Link to="/">Login</Link>
+                            </li>
+                            <li>
+                                <Link to="/devices">Devices</Link>
+                            </li>
+                        </ul>
+                    </div>
                 </nav>
                 <Routes>
                     <Route index element={<Login />} />
+                    <Route path="login" element={<Login />} />
                     <Route path="devices" element={<Devices />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
