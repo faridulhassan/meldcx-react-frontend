@@ -1,17 +1,31 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
 import LoginForm from "./LoginForm";
 import { postData } from "../../utils";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Alert from "../../components/Alert";
 import { setToken } from "../../services/TokenService";
+import { AuthContext } from "../../App";
 
 export default function Login() {
+    const location = useLocation();
     let navigate = useNavigate();
+
+    const { authToken, setAuthToken } = useContext(AuthContext);
 
     const [isLoading, setIsLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState({});
+
     let timeout;
+    useEffect(() => {
+        return () => {
+            timeout && clearTimeout(timeout);
+        };
+    }, []);
+    if (authToken) {
+        return <Navigate to="/devices" replace state={{ from: location }} />;
+    }
+
     const onSubmit = (formValue) => {
         setIsLoading(true);
         postData({
@@ -22,6 +36,7 @@ export default function Login() {
         })
             .then((result) => {
                 setToken(result?.data);
+                setAuthToken(result?.data);
                 setAlertMessage({
                     message: "You are successfully logged in!",
                     status: result?.status
@@ -42,11 +57,6 @@ export default function Login() {
                 }, 3000);
             });
     };
-    useEffect(() => {
-        return () => {
-            timeout && clearTimeout(timeout);
-        };
-    }, []);
     return (
         <div className="">
             <div className="container mx-auto">

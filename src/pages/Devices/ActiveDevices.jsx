@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 
 export default function ActiveDevices({ activeDevices = [] }) {
+    /* For circular device positioning */
     const radius = 250,
         circleNums = activeDevices.length,
         angle = (Math.PI * 2) / circleNums;

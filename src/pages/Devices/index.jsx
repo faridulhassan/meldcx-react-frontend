@@ -1,24 +1,50 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { NOTIFY_PARAMS } from "../../api";
+import { AuthContext } from "../../App";
 import Alert from "../../components/Alert";
 import Button from "../../components/Button";
 import Loader from "../../components/Loader";
+import useActiveDevices from "../../hooks/useActiveDevices";
 import { deleteToken, getToken } from "../../services/TokenService";
 import { postData } from "../../utils";
 import ActiveDevices from "./ActiveDevices";
 
 export default function Devices() {
+    const location = useLocation();
     let navigate = useNavigate();
 
-    let timeout;
+    const { authToken, setAuthToken } = useContext(AuthContext);
 
     const [isLoading, setIsLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState({});
 
-    const [activeDevices, setActiveDevices] = useState([]);
+    let timeout;
+    /* hooks for loading active devices */
 
-    const token = getToken();
+    const { isActiveDevicesLoading, activeDevices, errorMessage } = useActiveDevices();
+
+    useEffect(() => {
+        setAlertMessage(errorMessage);
+    }, [errorMessage]);
+
+    useEffect(() => {
+        setIsLoading(isActiveDevicesLoading);
+    }, [isActiveDevicesLoading]);
+
+    useEffect(() => {
+        const appEl = document.querySelector(".App");
+        appEl.classList.add("bg--secondary");
+        setIsLoading(false);
+        return () => {
+            appEl.classList.remove("bg--secondary");
+            timeout && clearTimeout(timeout);
+        };
+    }, []);
+    if (!authToken) {
+        return <Navigate to="/" replace state={{ from: location }} />;
+    }
+
     const onNotifyClick = (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -27,7 +53,7 @@ export default function Devices() {
             config: {
                 ...NOTIFY_PARAMS
             },
-            token
+            token: authToken
         })
             .then((result) => {
                 setIsLoading(false);
@@ -56,21 +82,11 @@ export default function Devices() {
         setIsLoading(true);
         setTimeout(() => {
             deleteToken();
+            setAuthToken(getToken());
             navigate("/", { replace: true });
             setIsLoading(false);
         }, 2000);
     };
-
-    useEffect(() => {
-        const appEl = document.querySelector(".App");
-        appEl.classList.add("bg--secondary");
-        setIsLoading(false);
-
-        return () => {
-            appEl.classList.remove("bg--secondary");
-            timeout && clearTimeout(timeout);
-        };
-    }, []);
 
     return (
         <div className="pt-40">
