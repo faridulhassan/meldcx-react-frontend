@@ -3,8 +3,9 @@ import { api } from "../api";
 export const getData = async (params) => {
     try {
         const result = await api.get(params.path, params.config || {});
-        if (result.status == 200 || result.statusText.toLowerCase() === "ok") {
-            return result.data;
+        const statusText = result.statusText.toLowerCase();
+        if (result.status <= 204 || statusText === "ok" || statusText === "created") {
+            return result;
         } else {
             throw new Error(result);
         }
@@ -18,12 +19,12 @@ export const postData = async (params) => {
         const authParams = {};
         if (params.token) {
             authParams.headers = {
-                Authorization: `Bearer  ${token}`
+                Authorization: `Bearer ${params.token}`
             };
         }
         const result = await api.post(params.path, params.config || {}, authParams);
-        if (result.status == 200 || result.statusText.toLowerCase() === "ok") {
-            return result.data;
+        if (result.status <= 204 || statusText === "ok" || statusText === "created") {
+            return result;
         } else {
             throw new Error(result);
         }
